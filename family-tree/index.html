@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lev's Family Tree</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Source+Sans+3:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1e2a1c;
+      --label: #3a4a36;
+      --parchment: #f4efe4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      background: #8a9084;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg,
+        #b7c9d6 0%,
+        #c5d4c8 28%,
+        #d8dcc8 52%,
+        #c8c3a8 72%,
+        #a89878 88%,
+        #7d6a4e 100%);
+      font-family: "Source Sans 3", system-ui, sans-serif;
+      color: var(--ink);
+    }
+
+    .title {
+      position: absolute;
+      top: 7mm;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .title h1 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 700;
+      font-size: 26pt;
+      letter-spacing: 0.04em;
+      color: #2a3824;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .title p {
+      margin-top: 1mm;
+      font-size: 9.5pt;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #4a5a44;
+    }
+
+    svg.scene {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .person-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 700;
+      font-size: 15px;
+      fill: #1c2418;
+    }
+
+    .person-role {
+      font-family: "Source Sans 3", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 8.5px;
+      letter-spacing: 0.12em;
+      fill: #4d5c48;
+    }
+
+    .person-name.me {
+      font-size: 16px;
+    }
+
+    .footer-note {
+      position: absolute;
+      bottom: 5mm;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #5a5040;
+      z-index: 5;
+      text-transform: uppercase;
+    }
+
+    @media print {
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page { box-shadow: none; margin: 0; }
+    }
+
+    @media screen {
+      body {
+        display: flex;
+        justify-content: center;
+        padding: 18px;
+        min-height: 100vh;
+      }
+      .page {
+        box-shadow: 0 18px 50px rgba(20, 28, 18, 0.35);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="title">
+      <h1>Lev’s Family Tree</h1>
+      <p>My family</p>
+    </div>
+
+    <svg class="scene" viewBox="0 0 794 1123" xmlns="http://www.w3.org/2000/svg" aria-label="Realistic family tree of Lev">
+      <defs>
+        <!-- Sky haze -->
+        <radialGradient id="sunGlow" cx="72%" cy="12%" r="45%">
+          <stop offset="0%" stop-color="#fff6d8" stop-opacity="0.75"/>
+          <stop offset="45%" stop-color="#e8d9a8" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#e8d9a8" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Bark wood grain -->
+        <linearGradient id="barkMain" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#3a2414"/>
+          <stop offset="18%" stop-color="#5c3a22"/>
+          <stop offset="42%" stop-color="#8a5e38"/>
+          <stop offset="58%" stop-color="#6d4528"/>
+          <stop offset="78%" stop-color="#4a2e18"/>
+          <stop offset="100%" stop-color="#2e1c10"/>
+        </linearGradient>
+        <linearGradient id="barkLight" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#2a180e"/>
+          <stop offset="35%" stop-color="#7a5330"/>
+          <stop offset="70%" stop-color="#5a3820"/>
+          <stop offset="100%" stop-color="#24160c"/>
+        </linearGradient>
+        <linearGradient id="rootBark" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6a4428"/>
+          <stop offset="55%" stop-color="#4a2e18"/>
+          <stop offset="100%" stop-color="#2e1c12"/>
+        </linearGradient>
+
+        <!-- Foliage -->
+        <radialGradient id="canopyDeep" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#6faf4a"/>
+          <stop offset="45%" stop-color="#3f7a32"/>
+          <stop offset="100%" stop-color="#1f4a22"/>
+        </radialGradient>
+        <radialGradient id="canopyMid" cx="55%" cy="40%" r="65%">
+          <stop offset="0%" stop-color="#8fc85a"/>
+          <stop offset="50%" stop-color="#4f9038"/>
+          <stop offset="100%" stop-color="#2a5c28"/>
+        </radialGradient>
+        <radialGradient id="canopyLite" cx="45%" cy="30%" r="60%">
+          <stop offset="0%" stop-color="#b6db78"/>
+          <stop offset="40%" stop-color="#6faf48"/>
+          <stop offset="100%" stop-color="#3a702e" stop-opacity="0.85"/>
+        </radialGradient>
+
+        <!-- Soil -->
+        <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#8a7a52" stop-opacity="0"/>
+          <stop offset="25%" stop-color="#6e5a3a" stop-opacity="0.55"/>
+          <stop offset="70%" stop-color="#4a3824" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#2e2214"/>
+        </linearGradient>
+        <pattern id="grassDots" width="18" height="10" patternUnits="userSpaceOnUse">
+          <path d="M3 10 Q4 2 5 10" stroke="#4a6a30" stroke-width="1.1" fill="none" opacity="0.55"/>
+          <path d="M10 10 Q11 1 12 10" stroke="#5a7a38" stroke-width="1" fill="none" opacity="0.45"/>
+          <path d="M15 10 Q16 3 17 10" stroke="#3a5a28" stroke-width="0.9" fill="none" opacity="0.4"/>
+        </pattern>
+
+        <!-- Name plate -->
+        <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f7f1e4"/>
+          <stop offset="100%" stop-color="#e4d7c0"/>
+        </linearGradient>
+        <linearGradient id="plateMe" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff3c8"/>
+          <stop offset="100%" stop-color="#efd58a"/>
+        </linearGradient>
+        <linearGradient id="leafTag" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#d8ef9a"/>
+          <stop offset="55%" stop-color="#8fc85a"/>
+          <stop offset="100%" stop-color="#4f8a38"/>
+        </linearGradient>
+
+        <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2.4" flood-color="#1a140c" flood-opacity="0.28"/>
+        </filter>
+        <filter id="deep" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="1" dy="4" stdDeviation="4" flood-color="#0e160c" flood-opacity="0.35"/>
+        </filter>
+        <filter id="barkNoise">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="4" result="noise"/>
+          <feColorMatrix type="matrix" values="0 0 0 0 0.25  0 0 0 0 0.14  0 0 0 0 0.06  0 0 0 0.35 0" in="noise" result="colored"/>
+          <feBlend in="SourceGraphic" in2="colored" mode="multiply"/>
+        </filter>
+
+        <!-- Leaf shape -->
+        <symbol id="leaf" viewBox="0 0 20 32">
+          <path d="M10 1 C16 8, 19 16, 10 31 C1 16, 4 8, 10 1 Z" fill="currentColor"/>
+          <path d="M10 4 L10 28" stroke="#2a4a1c" stroke-width="0.7" opacity="0.45"/>
+        </symbol>
+
+        <!-- Realistic oak leaf -->
+        <symbol id="oakLeaf" viewBox="0 0 40 56">
+          <path d="M20 2
+            C24 6, 28 8, 31 7
+            C28 12, 30 16, 34 17
+            C30 20, 31 24, 35 26
+            C30 28, 30 33, 33 36
+            C28 37, 26 42, 28 48
+            C24 46, 22 50, 20 55
+            C18 50, 16 46, 12 48
+            C14 42, 12 37, 7 36
+            C10 33, 10 28, 5 26
+            C9 24, 10 20, 6 17
+            C10 16, 12 12, 9 7
+            C12 8, 16 6, 20 2 Z"
+            fill="currentColor"/>
+          <path d="M20 8 L20 50" stroke="#234018" stroke-width="1" opacity="0.35"/>
+        </symbol>
+      </defs>
+
+      <!-- Atmosphere -->
+      <rect width="794" height="1123" fill="url(#sunGlow)"/>
+
+      <!-- Distant soft hills -->
+      <path d="M0 620 C120 580, 220 600, 320 590 C420 580, 520 610, 640 585 C720 570, 770 595, 794 600 L794 720 L0 720 Z"
+            fill="#9bb08a" opacity="0.35"/>
+      <path d="M0 660 C160 630, 280 655, 400 640 C520 625, 640 650, 794 635 L794 760 L0 760 Z"
+            fill="#87a074" opacity="0.28"/>
+
+      <!-- Ground / soil mound -->
+      <ellipse cx="397" cy="1005" rx="340" ry="78" fill="url(#soil)"/>
+      <ellipse cx="397" cy="990" rx="300" ry="42" fill="url(#grassDots)" opacity="0.7"/>
+      <path d="M60 980 C180 955, 300 970, 397 962 C500 954, 620 968, 740 978"
+            stroke="#5a6e3a" stroke-width="2" fill="none" opacity="0.35"/>
+
+      <!-- ========== TREE STRUCTURE ========== -->
+      <g filter="url(#deep)">
+        <!-- Main trunk (tapered organic shape) -->
+        <path d="M355 980
+                 C348 880, 350 780, 352 700
+                 C354 640, 348 590, 350 540
+                 C352 500, 360 470, 368 450
+                 L426 450
+                 C434 470, 442 500, 444 540
+                 C446 590, 440 640, 442 700
+                 C444 780, 446 880, 439 980
+                 C420 988, 374 988, 355 980 Z"
+              fill="url(#barkMain)"/>
+
+        <!-- Trunk highlight ridge -->
+        <path d="M372 975 C368 860, 370 740, 376 560 C378 510, 384 470, 388 452"
+              stroke="#a07848" stroke-width="6" fill="none" opacity="0.35" stroke-linecap="round"/>
+        <path d="M402 975 C400 860, 404 740, 408 560 C410 510, 414 470, 416 452"
+              stroke="#2a180e" stroke-width="4" fill="none" opacity="0.28" stroke-linecap="round"/>
+
+        <!-- Bark cracks / texture lines -->
+        <g stroke="#2a180e" stroke-linecap="round" opacity="0.28" fill="none">
+          <path d="M365 920 C370 880, 362 840, 368 800" stroke-width="1.4"/>
+          <path d="M420 940 C415 900, 424 860, 418 820" stroke-width="1.2"/>
+          <path d="M380 760 C385 730, 378 700, 382 670" stroke-width="1.3"/>
+          <path d="M430 720 C425 690, 432 660, 428 630" stroke-width="1.1"/>
+          <path d="M390 600 C394 575, 388 550, 392 525" stroke-width="1.2"/>
+        </g>
+
+        <!-- Left major limb → father / paternal side -->
+        <path d="M360 520
+                 C320 510, 270 500, 230 490
+                 C200 482, 170 470, 145 445
+                 C130 428, 122 400, 128 370
+                 L152 366
+                 C148 392, 156 412, 172 424
+                 C196 442, 230 452, 262 460
+                 C300 470, 340 478, 368 488
+                 Z"
+              fill="url(#barkLight)"/>
+
+        <!-- Left upper twig → Olya -->
+        <path d="M145 420 C120 400, 105 370, 102 340 L124 336 C126 362, 138 388, 158 405 Z"
+              fill="url(#barkLight)"/>
+
+        <!-- Left lower limb → paternal grandparents / roots connection -->
+        <path d="M358 700
+                 C300 710, 240 740, 190 790
+                 C160 820, 140 860, 130 900
+                 L158 908
+                 C166 870, 184 835, 212 808
+                 C258 762, 312 730, 368 718
+                 Z"
+              fill="url(#barkLight)"/>
+
+        <!-- Right major limb → mother / maternal side -->
+        <path d="M434 520
+                 C474 510, 524 500, 564 490
+                 C594 482, 624 470, 649 445
+                 C664 428, 672 400, 666 370
+                 L642 366
+                 C646 392, 638 412, 622 424
+                 C598 442, 564 452, 532 460
+                 C494 470, 454 478, 426 488
+                 Z"
+              fill="url(#barkLight)"/>
+
+        <!-- Right upper twig → Volodya -->
+        <path d="M649 420 C674 400, 689 370, 692 340 L670 336 C668 362, 656 388, 636 405 Z"
+              fill="url(#barkLight)"/>
+
+        <!-- Right lower limb → maternal grandparents -->
+        <path d="M436 700
+                 C494 710, 554 740, 604 790
+                 C634 820, 654 860, 664 900
+                 L636 908
+                 C628 870, 610 835, 582 808
+                 C536 762, 482 730, 426 718
+                 Z"
+              fill="url(#barkLight)"/>
+
+        <!-- Center fork up to children -->
+        <path d="M372 450
+                 C360 400, 330 350, 300 300
+                 C285 275, 275 250, 272 230
+                 L298 226
+                 C300 248, 310 270, 324 292
+                 C350 336, 376 380, 390 430
+                 Z"
+              fill="url(#barkLight)"/>
+        <path d="M422 450
+                 C434 400, 464 350, 494 300
+                 C509 275, 519 250, 522 230
+                 L496 226
+                 C494 248, 484 270, 470 292
+                 C444 336, 418 380, 404 430
+                 Z"
+              fill="url(#barkLight)"/>
+
+        <!-- Marriage bridge between parents (natural branch join) -->
+        <path d="M230 488 C290 455, 360 448, 397 448 C434 448, 504 455, 564 488
+                 C520 505, 450 512, 397 512 C344 512, 274 505, 230 488 Z"
+              fill="#5c3a22" opacity="0.85"/>
+      </g>
+
+      <!-- ========== ROOTS ========== -->
+      <g fill="url(#rootBark)" filter="url(#soft)">
+        <!-- Left root cluster (paternal) -->
+        <path d="M355 975 C300 990, 250 1010, 200 1045 C180 1060, 150 1075, 120 1085 L130 1095 C165 1082, 195 1065, 220 1048 C270 1015, 320 995, 360 982 Z"/>
+        <path d="M360 978 C320 1005, 290 1040, 270 1080 L288 1086 C305 1048, 332 1015, 372 990 Z"/>
+        <path d="M350 972 C280 985, 210 995, 140 990 C100 987, 70 975, 45 960 L52 948 C75 962, 105 974, 145 977 C210 982, 275 972, 348 960 Z"/>
+        <!-- Right root cluster (maternal) -->
+        <path d="M439 975 C494 990, 544 1010, 594 1045 C614 1060, 644 1075, 674 1085 L664 1095 C629 1082, 599 1065, 574 1048 C524 1015, 474 995, 434 982 Z"/>
+        <path d="M434 978 C474 1005, 504 1040, 524 1080 L506 1086 C489 1048, 462 1015, 422 990 Z"/>
+        <path d="M444 972 C514 985, 584 995, 654 990 C694 987, 724 975, 749 960 L742 948 C719 962, 689 974, 649 977 C584 982, 519 972, 446 960 Z"/>
+        <!-- Center surface roots -->
+        <path d="M360 985 C380 1000, 400 1005, 420 1000 C430 1015, 410 1030, 397 1035 C384 1030, 364 1015, 374 1000 C368 992, 360 985, 360 985 Z" opacity="0.9"/>
+      </g>
+
+      <!-- Root surface highlights -->
+      <g stroke="#8a6840" stroke-linecap="round" fill="none" opacity="0.3">
+        <path d="M200 1040 C250 1015, 300 995, 350 980" stroke-width="2"/>
+        <path d="M594 1040 C544 1015, 494 995, 444 980" stroke-width="2"/>
+        <path d="M80 968 C140 980, 220 975, 300 965" stroke-width="1.5"/>
+        <path d="M714 968 C654 980, 574 975, 494 965" stroke-width="1.5"/>
+      </g>
+
+      <!-- ========== FOLIAGE CANOPY ========== -->
+      <g filter="url(#deep)" opacity="0.98">
+        <!-- Large canopy masses -->
+        <ellipse cx="290" cy="210" rx="115" ry="88" fill="url(#canopyDeep)"/>
+        <ellipse cx="504" cy="210" rx="115" ry="88" fill="url(#canopyDeep)"/>
+        <ellipse cx="397" cy="175" rx="130" ry="95" fill="url(#canopyMid)"/>
+        <ellipse cx="340" cy="250" rx="70" ry="48" fill="url(#canopyLite)"/>
+        <ellipse cx="455" cy="248" rx="70" ry="48" fill="url(#canopyLite)"/>
+        <ellipse cx="220" cy="255" rx="55" ry="40" fill="url(#canopyMid)"/>
+        <ellipse cx="574" cy="255" rx="55" ry="40" fill="url(#canopyMid)"/>
+        <ellipse cx="397" cy="280" rx="48" ry="32" fill="#5a9a40"/>
+      </g>
+
+      <!-- Individual oak leaves for realism -->
+      <g opacity="0.92">
+        <use href="#oakLeaf" x="210" y="140" width="28" height="40" color="#5a9a38" transform="rotate(-25 224 160)"/>
+        <use href="#oakLeaf" x="250" y="120" width="26" height="38" color="#7ab84a" transform="rotate(15 263 139)"/>
+        <use href="#oakLeaf" x="300" y="105" width="30" height="42" color="#4a882e" transform="rotate(-10 315 126)"/>
+        <use href="#oakLeaf" x="350" y="95" width="28" height="40" color="#8fc85a" transform="rotate(20 364 115)"/>
+        <use href="#oakLeaf" x="400" y="100" width="30" height="42" color="#5a9a38" transform="rotate(-18 415 121)"/>
+        <use href="#oakLeaf" x="450" y="108" width="27" height="39" color="#7ab84a" transform="rotate(12 463 127)"/>
+        <use href="#oakLeaf" x="500" y="118" width="29" height="41" color="#4a882e" transform="rotate(-22 514 138)"/>
+        <use href="#oakLeaf" x="540" y="145" width="26" height="38" color="#6faf48" transform="rotate(25 553 164)"/>
+        <use href="#oakLeaf" x="180" y="200" width="24" height="36" color="#3f7a32" transform="rotate(-35 192 218)"/>
+        <use href="#oakLeaf" x="560" y="195" width="24" height="36" color="#3f7a32" transform="rotate(32 572 213)"/>
+        <use href="#oakLeaf" x="320" y="160" width="22" height="34" color="#b6db78" transform="rotate(8 331 177)"/>
+        <use href="#oakLeaf" x="430" y="155" width="22" height="34" color="#b6db78" transform="rotate(-8 441 172)"/>
+        <use href="#oakLeaf" x="270" y="230" width="20" height="30" color="#6faf48" transform="rotate(-40 280 245)"/>
+        <use href="#oakLeaf" x="480" y="228" width="20" height="30" color="#6faf48" transform="rotate(38 490 243)"/>
+        <use href="#oakLeaf" x="370" y="200" width="24" height="36" color="#4f9038" transform="rotate(5 382 218)"/>
+      </g>
+
+      <!-- Side foliage near aunt/uncle twigs -->
+      <g filter="url(#soft)">
+        <ellipse cx="112" cy="310" rx="48" ry="36" fill="url(#canopyMid)"/>
+        <ellipse cx="682" cy="310" rx="48" ry="36" fill="url(#canopyMid)"/>
+        <use href="#oakLeaf" x="85" y="280" width="22" height="32" color="#7ab84a" transform="rotate(-20 96 296)"/>
+        <use href="#oakLeaf" x="120" y="275" width="20" height="30" color="#5a9a38" transform="rotate(18 130 290)"/>
+        <use href="#oakLeaf" x="655" y="280" width="22" height="32" color="#7ab84a" transform="rotate(22 666 296)"/>
+        <use href="#oakLeaf" x="690" y="275" width="20" height="30" color="#5a9a38" transform="rotate(-15 700 290)"/>
+      </g>
+
+      <!-- ========== NAME PLATES ========== -->
+
+      <!-- Children as leaf tags (top) -->
+      <g filter="url(#soft)">
+        <!-- Lev -->
+        <g transform="translate(225, 195)">
+          <path d="M8 8
+                   C8 -2, 28 -6, 48 4
+                   C68 -4, 92 -2, 100 10
+                   C108 28, 100 48, 82 56
+                   C68 62, 52 64, 40 58
+                   C24 64, 4 52, 2 34
+                   C0 20, 4 12, 8 8 Z"
+                fill="url(#leafTag)" stroke="#2f5c28" stroke-width="1.6"/>
+          <text class="person-name me" x="50" y="28" text-anchor="middle">Lev</text>
+          <text class="person-role" x="50" y="44" text-anchor="middle" fill="#244820">ME</text>
+        </g>
+        <!-- Diana -->
+        <g transform="translate(470, 195)">
+          <path d="M8 8
+                   C8 -2, 28 -6, 48 4
+                   C68 -4, 92 -2, 100 10
+                   C108 28, 100 48, 82 56
+                   C68 62, 52 64, 40 58
+                   C24 64, 4 52, 2 34
+                   C0 20, 4 12, 8 8 Z"
+                fill="url(#leafTag)" stroke="#2f5c28" stroke-width="1.6"/>
+          <text class="person-name" x="50" y="28" text-anchor="middle">Diana</text>
+          <text class="person-role" x="50" y="44" text-anchor="middle" fill="#244820">SISTER</text>
+        </g>
+      </g>
+
+      <!-- Aunt & Uncle -->
+      <g filter="url(#soft)">
+        <g transform="translate(52, 318)">
+          <rect x="0" y="0" width="118" height="52" rx="6" fill="url(#plate)" stroke="#6a5a40" stroke-width="1.4"/>
+          <line x1="10" y1="0" x2="10" y2="52" stroke="#c4a878" stroke-width="2" opacity="0.5"/>
+          <text class="person-name" x="62" y="24" text-anchor="middle">Olya</text>
+          <text class="person-role" x="62" y="40" text-anchor="middle">AUNT</text>
+        </g>
+        <g transform="translate(624, 318)">
+          <rect x="0" y="0" width="118" height="52" rx="6" fill="url(#plate)" stroke="#6a5a40" stroke-width="1.4"/>
+          <line x1="10" y1="0" x2="10" y2="52" stroke="#c4a878" stroke-width="2" opacity="0.5"/>
+          <text class="person-name" x="62" y="24" text-anchor="middle">Volodya</text>
+          <text class="person-role" x="62" y="40" text-anchor="middle">UNCLE</text>
+        </g>
+      </g>
+
+      <!-- Parents on the main fork -->
+      <g filter="url(#soft)">
+        <g transform="translate(155, 455)">
+          <rect x="0" y="0" width="130" height="56" rx="6" fill="url(#plate)" stroke="#6a5a40" stroke-width="1.6"/>
+          <line x1="11" y1="0" x2="11" y2="56" stroke="#c4a878" stroke-width="2.2" opacity="0.55"/>
+          <text class="person-name" x="70" y="26" text-anchor="middle">Sasha</text>
+          <text class="person-role" x="70" y="43" text-anchor="middle">FATHER</text>
+        </g>
+        <g transform="translate(509, 455)">
+          <rect x="0" y="0" width="130" height="56" rx="6" fill="url(#plate)" stroke="#6a5a40" stroke-width="1.6"/>
+          <line x1="11" y1="0" x2="11" y2="56" stroke="#c4a878" stroke-width="2.2" opacity="0.55"/>
+          <text class="person-name" x="70" y="26" text-anchor="middle">Dasha</text>
+          <text class="person-role" x="70" y="43" text-anchor="middle">MOTHER</text>
+        </g>
+        <!-- subtle wedding band mark on joining branch -->
+        <circle cx="397" cy="478" r="7" fill="none" stroke="#c9a24a" stroke-width="2.2"/>
+        <circle cx="397" cy="478" r="3.2" fill="#e8c86a" opacity="0.85"/>
+      </g>
+
+      <!-- Side captions -->
+      <text x="175" y="820" text-anchor="middle" fill="#5a5040" font-family="Source Sans 3, sans-serif" font-size="10" font-weight="700" letter-spacing="1.5">FATHER’S PARENTS</text>
+      <text x="619" y="820" text-anchor="middle" fill="#5a5040" font-family="Source Sans 3, sans-serif" font-size="10" font-weight="700" letter-spacing="1.5">MOTHER’S PARENTS</text>
+
+      <!-- Grandparents at the roots -->
+      <g filter="url(#soft)">
+        <g transform="translate(40, 875)">
+          <rect x="0" y="0" width="124" height="56" rx="5" fill="url(#plate)" stroke="#5a4a32" stroke-width="1.5"/>
+          <text class="person-name" x="62" y="26" text-anchor="middle">Andrey</text>
+          <text class="person-role" x="62" y="43" text-anchor="middle">GRANDFATHER</text>
+        </g>
+        <g transform="translate(175, 875)">
+          <rect x="0" y="0" width="124" height="56" rx="5" fill="url(#plate)" stroke="#5a4a32" stroke-width="1.5"/>
+          <text class="person-name" x="62" y="26" text-anchor="middle">Sveta</text>
+          <text class="person-role" x="62" y="43" text-anchor="middle">GRANDMOTHER</text>
+        </g>
+        <g transform="translate(495, 875)">
+          <rect x="0" y="0" width="124" height="56" rx="5" fill="url(#plate)" stroke="#5a4a32" stroke-width="1.5"/>
+          <text class="person-name" x="62" y="26" text-anchor="middle">Kostya</text>
+          <text class="person-role" x="62" y="43" text-anchor="middle">GRANDFATHER</text>
+        </g>
+        <g transform="translate(630, 875)">
+          <rect x="0" y="0" width="124" height="56" rx="5" fill="url(#plate)" stroke="#5a4a32" stroke-width="1.5"/>
+          <text class="person-name" x="62" y="26" text-anchor="middle">Nastya</text>
+          <text class="person-role" x="62" y="43" text-anchor="middle">GRANDMOTHER</text>
+        </g>
+      </g>
+
+      <!-- Tiny moss / ground detail near roots -->
+      <g fill="#4a6a30" opacity="0.45">
+        <ellipse cx="280" cy="1008" rx="18" ry="5"/>
+        <ellipse cx="510" cy="1012" rx="22" ry="5"/>
+        <ellipse cx="397" cy="1025" rx="30" ry="6"/>
+      </g>
+    </svg>
+
+    <div class="footer-note">Grandparents in the roots · Children in the leaves · A4</div>
+  </div>
+</body>
+</html>
